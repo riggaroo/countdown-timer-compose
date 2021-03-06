@@ -29,7 +29,7 @@ import com.example.androiddevchallenge.ui.util.lerp
 @Composable
 fun BackgroundGradient(modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition()
-    val animationSpec : InfiniteRepeatableSpec<Color> = infiniteRepeatable(
+    val animationSpec: InfiniteRepeatableSpec<Color> = infiniteRepeatable(
         animation = tween(3000, easing = FastOutSlowInEasing),
         repeatMode = RepeatMode.Reverse
     )
@@ -57,36 +57,44 @@ fun BackgroundGradient(modifier: Modifier = Modifier) {
         )
     )
 
-    val bubbles = 23
-    val bubbleInfo = mutableListOf<BubbleInfo>()
-
-    for (i in 0..bubbles) {
-        val bubblePoint = remember {
+    val numberBubbles = 23
+    val bubbleInfo = remember {
+        val bubbleInfos = mutableListOf<BubbleInfo>()
+        for (i in 0..numberBubbles) {
             val offset = Offset(Math.random().toFloat(), Math.random().toFloat())
-            BubbleInfo(
+            val bubblePoint = BubbleInfo(
                 offset,
                 Offset(Math.random().toFloat(), Math.random().toFloat()),
                 Math.random().toFloat(),
                 Math.random().toFloat() * 50,
                 Math.random().toFloat() * 50
             )
+
+            bubbleInfos.add(bubblePoint)
         }
-        bubbleInfo.add(bubblePoint)
+        bubbleInfos
     }
 
     Canvas(modifier = modifier.fillMaxSize()) {
         val brushBackground = Brush.verticalGradient(
-            listOf(colorFirst, colorSecond, colorThird), 0f, size.height.toDp().toPx(), TileMode.Mirror
+            listOf(colorFirst, colorSecond, colorThird),
+            0f,
+            size.height.toDp().toPx(),
+            TileMode.Mirror
         )
         drawRect(brushBackground)
 
         for (bubble in bubbleInfo) {
             val offsetAnimated = lerp(bubble.point, bubble.pointEnd, animatedProgress)
             val radiusAnimated = lerp(bubble.radius, bubble.radiusEnd, animatedProgress)
-            val sizeScaled = size * 1.4f
+            val sizeScaled =
+                size * 1.4f // increase by a bigger scale to allow for bubbles to go off the screen
             drawCircle(
-                orange, radiusAnimated * density,
-                Offset(offsetAnimated.x * sizeScaled.width, offsetAnimated.y * sizeScaled.height), alpha = bubble.alpha)
+                orange,
+                radiusAnimated * density,
+                Offset(offsetAnimated.x * sizeScaled.width, offsetAnimated.y * sizeScaled.height),
+                alpha = bubble.alpha
+            )
         }
 
     }
