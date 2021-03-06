@@ -36,7 +36,7 @@ fun FlashingTimerText(timerText: String){
 fun TimerText(modifier: Modifier = Modifier, timerText: String) {
     Text(modifier = modifier
         .fillMaxWidth()
-        .padding(16.dp),
+        .padding(8.dp),
         style = MaterialTheme.typography.h1,
         text = timerText,
         textAlign = TextAlign.Center

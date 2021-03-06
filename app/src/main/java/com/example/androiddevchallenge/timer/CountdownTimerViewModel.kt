@@ -66,6 +66,22 @@ class CountdownTimerViewModel : ViewModel() {
         }
     }
 
+    fun addTime(duration: Duration) {
+        val currentState = viewState.value!!
+
+        _viewState.value = currentState.copy(timerDuration = currentState.timerDuration.plus(duration))
+    }
+
+    fun removeTime(duration: Duration) {
+        val currentState = viewState.value!!
+
+        val currentDuration = currentState.timerDuration
+        if (currentDuration.minus(duration).isNegative){
+            return
+        }
+        _viewState.value = currentState.copy(timerDuration = currentDuration.minus(duration))
+    }
+
     private fun resetTimer() {
         _viewState.value = viewState.value!!.copy(
             timerViewState = TimerViewState.IDLE,

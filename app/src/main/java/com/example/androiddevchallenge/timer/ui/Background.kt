@@ -2,6 +2,7 @@ package com.example.androiddevchallenge.timer.ui
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -17,38 +18,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.lerp
 import com.example.androiddevchallenge.ui.theme.lightPurple
 import com.example.androiddevchallenge.ui.theme.orange
 import com.example.androiddevchallenge.ui.theme.peach
+import com.example.androiddevchallenge.ui.util.lerp
 
 @Composable
 fun BackgroundGradient(modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition()
+    val animationSpec : InfiniteRepeatableSpec<Color> = infiniteRepeatable(
+        animation = tween(3000, easing = FastOutSlowInEasing),
+        repeatMode = RepeatMode.Reverse
+    )
     val colorFirst by infiniteTransition.animateColor(
         initialValue = orange,
         targetValue = peach,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
+        animationSpec = animationSpec
     )
     val colorSecond by infiniteTransition.animateColor(
         initialValue = peach,
         targetValue = lightPurple,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
+        animationSpec = animationSpec
     )
     val colorThird by infiniteTransition.animateColor(
         initialValue = lightPurple,
         targetValue = orange,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
+        animationSpec = animationSpec
     )
     val animatedProgress by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -101,7 +99,3 @@ data class BubbleInfo(
     val radius: Float,
     val radiusEnd: Float
 )
-
-fun lerp(start: Float, stop: Float, fraction: Float): Float {
-    return (1 - fraction) * start + fraction * stop
-}
