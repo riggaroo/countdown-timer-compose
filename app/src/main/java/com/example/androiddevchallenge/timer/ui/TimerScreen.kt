@@ -29,11 +29,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.androiddevchallenge.timer.ui.BackgroundGradient
 import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.timer.ext.formatDuration
+import com.example.androiddevchallenge.timer.ui.FlashingTimerText
+import com.example.androiddevchallenge.timer.ui.TimerButton
+import com.example.androiddevchallenge.timer.ui.TimerText
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -59,10 +63,21 @@ fun TimerScreen(timerViewModel: CountdownTimerViewModel, navController: NavContr
             }
         }
     }
+    TimerContents(state = state, onButtonPress = { timerViewModel.timerButtonPressed() })
+}
+
+@Preview
+@Composable
+fun PreviewTimerScreen() {
+    TimerContents(state = TimerModel(), onButtonPress = {  })
+}
+
+@Composable
+fun TimerContents(state: TimerModel, onButtonPress : () -> Unit) {
     Surface(color = MaterialTheme.colors.background) {
         BackgroundGradient()
-        Column(modifier = Modifier.padding(16.dp).fillMaxSize(),
-        verticalArrangement = Arrangement.Center) {
+        Column(modifier = Modifier.fillMaxSize().padding(bottom = 56.dp),
+            verticalArrangement = Arrangement.Center) {
             when (state.timerViewState) {
                 TimerViewState.RUNNING -> {
                     TimerText(timerText = state.durationRemaining.formatDuration())
@@ -79,7 +94,7 @@ fun TimerScreen(timerViewModel: CountdownTimerViewModel, navController: NavContr
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ){
-            TimerButton(state.timerViewState, onButtonClick = { timerViewModel.timerButtonPressed() })
+            TimerButton(state.timerViewState, onButtonClick = { onButtonPress() })
         }
     }
 }
@@ -107,57 +122,6 @@ fun playSound(mediaPlayer: MediaPlayer) {
     mediaPlayer.start()
 }
 
-fun stopPlayingSound(mediaPlayer: MediaPlayer){
+fun stopPlayingSound(mediaPlayer: MediaPlayer) {
     mediaPlayer.stop()
-}
-
-@Composable
-fun FlashingTimerText(timerText: String){
-    val infiniteTransition = rememberInfiniteTransition()
-    val alpha by infiniteTransition.animateFloat(
-        initialValue = 1.0f,
-        targetValue = 0.0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(400, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-    TimerText(modifier = Modifier.alpha(alpha),
-        timerText = timerText)
-}
-
-@Composable
-fun TimerText(modifier: Modifier = Modifier, timerText: String) {
-    Text(modifier = modifier
-        .fillMaxWidth()
-        .padding(16.dp),
-        style = MaterialTheme.typography.h1,
-        text = timerText,
-        textAlign = TextAlign.Center
-    )
-}
-
-@Composable
-fun TimerButton(timerViewState: TimerViewState, onButtonClick: () -> Unit){
-    Button(
-        elevation = null,
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        onClick = {
-            onButtonClick()
-        }) {
-        val text = when (timerViewState){
-            TimerViewState.IDLE -> {
-                stringResource(id = R.string.start_timer)
-            }
-            TimerViewState.RUNNING -> {
-                stringResource(id = R.string.stop_timer)
-            }
-            TimerViewState.FINISHED -> {
-                stringResource(id = R.string.restart_timer)
-            }
-        }
-        Text(text = text)
-    }
 }
