@@ -38,6 +38,8 @@ import com.example.androiddevchallenge.timer.ext.formatDuration
 import com.example.androiddevchallenge.timer.ui.FlashingTimerText
 import com.example.androiddevchallenge.timer.ui.TimerButton
 import com.example.androiddevchallenge.timer.ui.TimerText
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -76,25 +78,29 @@ fun PreviewTimerScreen() {
 fun TimerContents(state: TimerModel, onButtonPress : () -> Unit) {
     Surface(color = MaterialTheme.colors.background) {
         BackgroundGradient()
-        Column(modifier = Modifier.fillMaxSize().padding(bottom = 56.dp),
-            verticalArrangement = Arrangement.Center) {
-            when (state.timerViewState) {
-                TimerViewState.RUNNING -> {
-                    TimerText(timerText = state.durationRemaining.formatDuration())
-                }
-                TimerViewState.IDLE -> {
-                    TimerText(timerText = state.timerDuration.formatDuration())
-                }
-                TimerViewState.FINISHED -> {
-                    FlashingTimerText(timerText = "00:00")
+        ProvideWindowInsets {
+            Column(modifier = Modifier.fillMaxSize()
+                .padding(bottom = 56.dp),
+                verticalArrangement = Arrangement.Center) {
+                when (state.timerViewState) {
+                    TimerViewState.RUNNING -> {
+                        TimerText(timerText = state.durationRemaining.formatDuration())
+                    }
+                    TimerViewState.IDLE -> {
+                        TimerText(timerText = state.timerDuration.formatDuration())
+                    }
+                    TimerViewState.FINISHED -> {
+                        FlashingTimerText(timerText = "00:00")
+                    }
                 }
             }
-        }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
-        ){
-            TimerButton(state.timerViewState, onButtonClick = { onButtonPress() })
+            Column(
+                modifier = Modifier.fillMaxSize()
+                    .navigationBarsPadding(),
+                verticalArrangement = Arrangement.Bottom
+            ){
+                TimerButton(state.timerViewState, onButtonClick = { onButtonPress() })
+            }
         }
     }
 }
