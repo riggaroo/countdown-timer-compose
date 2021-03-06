@@ -1,3 +1,18 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge.timer
 
 import android.os.CountDownTimer
@@ -17,7 +32,7 @@ class CountdownTimerViewModel : ViewModel() {
 
     val viewEffectChannel = Channel<TimerViewEffect>()
 
-    private var timer : CountDownTimer? = null
+    private var timer: CountDownTimer? = null
 
     init {
         _viewState.value = TimerModel()
@@ -35,7 +50,8 @@ class CountdownTimerViewModel : ViewModel() {
             override fun onFinish() {
                 _viewState.value = viewState.value!!.copy(
                     timerViewState = TimerViewState.FINISHED,
-                    durationRemaining = Duration.ZERO)
+                    durationRemaining = Duration.ZERO
+                )
                 viewModelScope.launch {
                     viewEffectChannel.send(TimerViewEffect.TimerFinished)
                 }
@@ -48,12 +64,13 @@ class CountdownTimerViewModel : ViewModel() {
         timer?.cancel()
         _viewState.value = viewState.value!!.copy(
             timerViewState = TimerViewState.IDLE,
-            durationRemaining = viewState.value!!.timerDuration)
+            durationRemaining = viewState.value!!.timerDuration
+        )
     }
 
     fun timerButtonPressed() {
         val state = viewState.value!!
-        when (state.timerViewState){
+        when (state.timerViewState) {
             TimerViewState.IDLE -> {
                 startTimer(state.timerDuration)
             }
@@ -76,7 +93,7 @@ class CountdownTimerViewModel : ViewModel() {
         val currentState = viewState.value!!
 
         val currentDuration = currentState.timerDuration
-        if (currentDuration.minus(duration).isNegative){
+        if (currentDuration.minus(duration).isNegative) {
             return
         }
         _viewState.value = currentState.copy(timerDuration = currentDuration.minus(duration))
@@ -85,7 +102,8 @@ class CountdownTimerViewModel : ViewModel() {
     private fun resetTimer() {
         _viewState.value = viewState.value!!.copy(
             timerViewState = TimerViewState.IDLE,
-            durationRemaining = viewState.value!!.timerDuration)
+            durationRemaining = viewState.value!!.timerDuration
+        )
         viewModelScope.launch {
             viewEffectChannel.send(TimerViewEffect.TimerReset)
         }

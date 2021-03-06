@@ -17,8 +17,6 @@ package com.example.androiddevchallenge.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-
-
 val orange = Color(0xFFF9A060)
 val peach = Color(0xFFD04D72)
 val bubbleColor = Color(0xFFA53152)
