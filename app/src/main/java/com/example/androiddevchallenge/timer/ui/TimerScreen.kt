@@ -78,7 +78,7 @@ fun PreviewTimerScreen() {
 @Composable
 fun TimerContents(state: TimerModel, onButtonPress : () -> Unit) {
     Surface(color = MaterialTheme.colors.background) {
-        BackgroundGradient(percentageFill = state.getPercentageComplete())
+        BackgroundGradient()
         ProvideWindowInsets {
             Column(modifier = Modifier
                 .fillMaxSize()
