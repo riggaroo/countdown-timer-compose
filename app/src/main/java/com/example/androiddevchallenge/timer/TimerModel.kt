@@ -10,6 +10,10 @@ data class TimerModel(
     fun isTimerRunning(): Boolean {
         return timerViewState == TimerViewState.RUNNING
     }
+
+    fun getPercentageComplete() : Float {
+        return 1 - (durationRemaining.toMillis().toFloat() / timerDuration.toMillis().toFloat())
+    }
 }
 
 

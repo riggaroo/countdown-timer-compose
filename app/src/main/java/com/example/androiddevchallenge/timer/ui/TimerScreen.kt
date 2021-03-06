@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import com.example.androiddevchallenge.timer.ui.BackgroundGradient
 import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.timer.ext.formatDuration
+import com.example.androiddevchallenge.timer.ui.DeterminateProgressBar
 import com.example.androiddevchallenge.timer.ui.FlashingTimerText
 import com.example.androiddevchallenge.timer.ui.TimerButton
 import com.example.androiddevchallenge.timer.ui.TimerText
@@ -77,14 +78,17 @@ fun PreviewTimerScreen() {
 @Composable
 fun TimerContents(state: TimerModel, onButtonPress : () -> Unit) {
     Surface(color = MaterialTheme.colors.background) {
-        BackgroundGradient()
+        BackgroundGradient(percentageFill = state.getPercentageComplete())
         ProvideWindowInsets {
-            Column(modifier = Modifier.fillMaxSize()
+            Column(modifier = Modifier
+                .fillMaxSize()
                 .padding(bottom = 56.dp),
                 verticalArrangement = Arrangement.Center) {
                 when (state.timerViewState) {
                     TimerViewState.RUNNING -> {
-                        TimerText(timerText = state.durationRemaining.formatDuration())
+                        DeterminateProgressBar(progress =  1 - state.getPercentageComplete()) {
+                            TimerText(timerText = state.durationRemaining.formatDuration())
+                        }
                     }
                     TimerViewState.IDLE -> {
                         TimerText(timerText = state.timerDuration.formatDuration())
@@ -95,7 +99,8 @@ fun TimerContents(state: TimerModel, onButtonPress : () -> Unit) {
                 }
             }
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .navigationBarsPadding(),
                 verticalArrangement = Arrangement.Bottom
             ){
@@ -129,5 +134,7 @@ fun playSound(mediaPlayer: MediaPlayer) {
 }
 
 fun stopPlayingSound(mediaPlayer: MediaPlayer) {
-    mediaPlayer.stop()
+    if (mediaPlayer.isPlaying) {
+        mediaPlayer.stop()
+    }
 }
