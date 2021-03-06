@@ -7,8 +7,7 @@ fun Duration.formatDuration(): String {
     val seconds: Long = this.seconds
     val absSeconds = abs(seconds)
     val positive = String.format(
-        "%d:%02d:%02d",
-        absSeconds / 3600,
+        "%02d:%02d",
         absSeconds % 3600 / 60,
         absSeconds % 60
     )

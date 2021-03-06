@@ -4,6 +4,9 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 import java.time.Duration
 
 class CountdownTimerViewModel : ViewModel() {
@@ -11,6 +14,8 @@ class CountdownTimerViewModel : ViewModel() {
     private val _viewState = MutableLiveData<TimerModel>()
     val viewState: LiveData<TimerModel>
         get() = _viewState
+
+    val viewEffectChannel = Channel<TimerViewEffect>()
 
     private var timer : CountDownTimer? = null
 
@@ -22,13 +27,18 @@ class CountdownTimerViewModel : ViewModel() {
         timer = object : CountDownTimer(duration.toMillis(), Duration.ofSeconds(1).toMillis()) {
             override fun onTick(millisUntilFinished: Long) {
                 _viewState.value = viewState.value!!.copy(
-                    isRunning = true,
+                    timerViewState = TimerViewState.RUNNING,
                     durationRemaining = Duration.ofMillis(millisUntilFinished)
                 )
             }
 
             override fun onFinish() {
-                _viewState.value = viewState.value!!.copy(isRunning = false, durationRemaining = Duration.ZERO)
+                _viewState.value = viewState.value!!.copy(
+                    timerViewState = TimerViewState.FINISHED,
+                    durationRemaining = Duration.ZERO)
+                viewModelScope.launch {
+                    viewEffectChannel.send(TimerViewEffect.TimerFinished)
+                }
             }
         }
         timer?.start()
@@ -36,14 +46,32 @@ class CountdownTimerViewModel : ViewModel() {
 
     private fun stopTimer() {
         timer?.cancel()
-        _viewState.value = viewState.value!!.copy(isRunning = false, durationRemaining = viewState.value!!.timerDuration)
+        _viewState.value = viewState.value!!.copy(
+            timerViewState = TimerViewState.IDLE,
+            durationRemaining = viewState.value!!.timerDuration)
     }
 
     fun timerButtonPressed() {
-        if (viewState.value!!.isRunning) {
-            stopTimer()
-        } else {
-            startTimer(viewState.value!!.timerDuration)
+        val state = viewState.value!!
+        when (state.timerViewState){
+            TimerViewState.IDLE -> {
+                startTimer(state.timerDuration)
+            }
+            TimerViewState.RUNNING -> {
+                stopTimer()
+            }
+            TimerViewState.FINISHED -> {
+                resetTimer()
+            }
+        }
+    }
+
+    private fun resetTimer() {
+        _viewState.value = viewState.value!!.copy(
+            timerViewState = TimerViewState.IDLE,
+            durationRemaining = viewState.value!!.timerDuration)
+        viewModelScope.launch {
+            viewEffectChannel.send(TimerViewEffect.TimerReset)
         }
     }
 }
