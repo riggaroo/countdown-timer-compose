@@ -55,7 +55,7 @@ fun DeterminateProgressBar(
     val brushBackground = remember { SolidColor(backgroundColor) }
     val animateCurrentProgress = animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+        animationSpec = tween(durationMillis = 100, easing = LinearEasing)
     )
 
     val progressDegrees = animateCurrentProgress.value * PROGRESS_FULL_DEGREES
@@ -63,14 +63,14 @@ fun DeterminateProgressBar(
     Box {
         Canvas(
             modifier = modifier
-                .fillMaxSize()
                 .aspectRatio(1f)
+                .fillMaxSize()
                 .padding(16.dp)
         ) {
             // Background of Progress bar
             drawArc(
                 brush = brushBackground,
-                startAngle = 0f,
+                startAngle = 90f,
                 sweepAngle = PROGRESS_FULL_DEGREES,
                 useCenter = false,
                 style = drawStyle
@@ -79,7 +79,7 @@ fun DeterminateProgressBar(
             // Foreground of progress bar, only drawn to the size of the progress
             drawArc(
                 brush = brush,
-                startAngle = 0f,
+                startAngle = 270f,
                 sweepAngle = progressDegrees,
                 useCenter = false,
                 style = drawStyle

@@ -35,7 +35,6 @@ import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.unit.lerp
 import com.example.androiddevchallenge.ui.theme.lightPurple
 import com.example.androiddevchallenge.ui.theme.orange
 import com.example.androiddevchallenge.ui.theme.peach
@@ -77,14 +76,17 @@ fun BackgroundGradient(modifier: Modifier = Modifier) {
         val bubbleInfos = mutableListOf<BubbleInfo>()
         for (i in 0..numberBubbles) {
             val offset = Offset(Math.random().toFloat(), Math.random().toFloat())
+            val offsetEnd = Offset(Math.random().toFloat(), Math.random().toFloat())
+            val radius = Math.random().toFloat() * 50
+            val radiusEnd = Math.random().toFloat() * 50
+
             val bubblePoint = BubbleInfo(
                 offset,
-                Offset(Math.random().toFloat(), Math.random().toFloat()),
+                offsetEnd,
                 Math.random().toFloat(),
-                Math.random().toFloat() * 50,
-                Math.random().toFloat() * 50
+                radius,
+                radiusEnd
             )
-
             bubbleInfos.add(bubblePoint)
         }
         bubbleInfos

@@ -24,7 +24,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import java.time.Duration
 
-class CountdownTimerViewModel : ViewModel() {
+class TimerViewModel : ViewModel() {
 
     private val _viewState = MutableLiveData<TimerModel>()
     val viewState: LiveData<TimerModel>
@@ -39,7 +39,7 @@ class CountdownTimerViewModel : ViewModel() {
     }
 
     private fun startTimer(duration: Duration) {
-        timer = object : CountDownTimer(duration.toMillis(), Duration.ofSeconds(1).toMillis()) {
+        timer = object : CountDownTimer(duration.toMillis(), 10) {
             override fun onTick(millisUntilFinished: Long) {
                 _viewState.value = viewState.value!!.copy(
                     timerViewState = TimerViewState.RUNNING,

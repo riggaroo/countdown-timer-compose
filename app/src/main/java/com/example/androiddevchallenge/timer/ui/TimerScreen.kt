@@ -16,6 +16,7 @@
 package com.example.androiddevchallenge.timer
 
 import android.content.Context
+import android.content.res.Configuration
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.VibrationEffect
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,7 +51,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import java.time.Duration
 
 @Composable
-fun TimerScreen(timerViewModel: CountdownTimerViewModel, navController: NavController) {
+fun TimerScreen(timerViewModel: TimerViewModel, navController: NavController) {
     val viewStateObserver = timerViewModel.viewState.observeAsState(initial = TimerModel())
     val state = viewStateObserver.value
     val context = LocalContext.current
@@ -107,27 +109,7 @@ fun TimerContents(
                     .padding(bottom = 56.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-                when (state.timerViewState) {
-                    TimerViewState.RUNNING -> {
-                        DeterminateProgressBar(progress = 1 - state.getPercentageComplete()) {
-                            TimerText(timerText = state.durationRemaining.formatDuration())
-                        }
-                    }
-                    TimerViewState.IDLE -> {
-                        TimerDurationWidget(
-                            timerDuration = state.timerDuration,
-                            onAddTime = {
-                                onAddTime(it)
-                            },
-                            onRemoveTime = {
-                                onRemoveTime(it)
-                            }
-                        )
-                    }
-                    TimerViewState.FINISHED -> {
-                        FlashingTimerText(timerText = "00:00")
-                    }
-                }
+                Timer(state = state, onAddTime, onRemoveTime)
             }
             Column(
                 modifier = Modifier
@@ -137,6 +119,43 @@ fun TimerContents(
             ) {
                 TimerButton(state.timerViewState, onButtonClick = { onTimerButtonPress() })
             }
+        }
+    }
+}
+
+@Composable
+fun Timer(
+    state: TimerModel,
+    onAddTime: (Duration) -> Unit,
+    onRemoveTime: (Duration) -> Unit
+) {
+    when (state.timerViewState) {
+        TimerViewState.RUNNING -> {
+            val configuration = LocalConfiguration.current
+            when (configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    TimerText(timerText = state.durationRemaining.formatDuration())
+                }
+                else -> {
+                    DeterminateProgressBar(progress = state.getPercentageComplete()) {
+                        TimerText(timerText = state.durationRemaining.formatDuration())
+                    }
+                }
+            }
+        }
+        TimerViewState.IDLE -> {
+            TimerDurationWidget(
+                timerDuration = state.timerDuration,
+                onAddTime = {
+                    onAddTime(it)
+                },
+                onRemoveTime = {
+                    onRemoveTime(it)
+                }
+            )
+        }
+        TimerViewState.FINISHED -> {
+            FlashingTimerText(timerText = "00:00")
         }
     }
 }

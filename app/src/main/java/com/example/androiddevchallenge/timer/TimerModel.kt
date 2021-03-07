@@ -27,7 +27,7 @@ data class TimerModel(
     }
 
     fun getPercentageComplete(): Float {
-        return 1 - (durationRemaining.toMillis().toFloat() / timerDuration.toMillis().toFloat())
+        return (durationRemaining.toMillis().toFloat() / timerDuration.toMillis().toFloat())
     }
 }
 
