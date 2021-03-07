@@ -20,5 +20,4 @@ sealed class TimerViewEffect {
     object TimerFinished : TimerViewEffect()
 
     object TimerReset : TimerViewEffect()
-
 }

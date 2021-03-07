@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -78,7 +77,7 @@ fun TimerSetDuration(
             )
             Spacer(modifier = Modifier.width(96.dp))
             Icon(
-                Icons.Outlined.Remove, contentDescription =  stringResource(id = R.string.remove_second),
+                Icons.Outlined.Remove, contentDescription = stringResource(id = R.string.remove_second),
                 modifier = Modifier
                     .size(56.dp)
                     .clickable {

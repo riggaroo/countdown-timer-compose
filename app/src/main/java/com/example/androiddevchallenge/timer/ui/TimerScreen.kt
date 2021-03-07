@@ -57,7 +57,7 @@ fun TimerScreen(timerViewModel: TimerViewModel, navController: NavController) {
     val context = LocalContext.current
 
     LaunchedEffect(key1 = navController) {
-        var mediaPlayer : MediaPlayer? = null
+        var mediaPlayer: MediaPlayer? = null
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         timerViewModel.viewEffectChannel.receiveAsFlow().collect { viewEffect ->
             when (viewEffect) {
