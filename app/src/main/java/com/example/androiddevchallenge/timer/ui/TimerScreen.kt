@@ -42,7 +42,7 @@ import com.example.androiddevchallenge.timer.ui.BackgroundGradient
 import com.example.androiddevchallenge.timer.ui.DeterminateProgressBar
 import com.example.androiddevchallenge.timer.ui.FlashingTimerText
 import com.example.androiddevchallenge.timer.ui.TimerButton
-import com.example.androiddevchallenge.timer.ui.TimerDurationWidget
+import com.example.androiddevchallenge.timer.ui.TimerSetDuration
 import com.example.androiddevchallenge.timer.ui.TimerText
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
@@ -145,7 +145,7 @@ fun Timer(
             }
         }
         TimerViewState.IDLE -> {
-            TimerDurationWidget(
+            TimerSetDuration(
                 timerDuration = state.timerDuration,
                 onAddTime = {
                     onAddTime(it)

@@ -38,7 +38,7 @@ import com.example.androiddevchallenge.timer.ext.formatDuration
 import java.time.Duration
 
 @Composable
-fun TimerDurationWidget(
+fun TimerSetDuration(
     timerDuration: Duration,
     onAddTime: (Duration) -> Unit,
     onRemoveTime: (Duration) -> Unit

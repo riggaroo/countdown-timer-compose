@@ -95,10 +95,10 @@ fun DeterminateProgressBar(
 @Composable
 fun PreviewProgressBar() {
     DeterminateProgressBar(
-        modifier = Modifier.size(96.dp),
-        progress = 0.9f
+        modifier = Modifier.size(100.dp),
+        progress = 0.75f
     ) {
-        Text("Hi!")
+        Text("00:01")
     }
 }
 

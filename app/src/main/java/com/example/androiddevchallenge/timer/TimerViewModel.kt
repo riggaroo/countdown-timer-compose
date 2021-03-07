@@ -38,17 +38,25 @@ class TimerViewModel : ViewModel() {
         _viewState.value = TimerModel()
     }
 
+    private fun getCurrentState(): TimerModel {
+        return _viewState.value!!
+    }
+
     private fun startTimer(duration: Duration) {
         timer = object : CountDownTimer(duration.toMillis(), 10) {
             override fun onTick(millisUntilFinished: Long) {
-                _viewState.value = viewState.value!!.copy(
+                val currentState = getCurrentState()
+
+                _viewState.value = currentState.copy(
                     timerViewState = TimerViewState.RUNNING,
                     durationRemaining = Duration.ofMillis(millisUntilFinished)
                 )
             }
 
             override fun onFinish() {
-                _viewState.value = viewState.value!!.copy(
+                val currentState = getCurrentState()
+
+                _viewState.value = currentState.copy(
                     timerViewState = TimerViewState.FINISHED,
                     durationRemaining = Duration.ZERO
                 )
@@ -62,17 +70,18 @@ class TimerViewModel : ViewModel() {
 
     private fun stopTimer() {
         timer?.cancel()
-        _viewState.value = viewState.value!!.copy(
+        val currentState = getCurrentState()
+        _viewState.value = currentState.copy(
             timerViewState = TimerViewState.IDLE,
-            durationRemaining = viewState.value!!.timerDuration
+            durationRemaining = currentState.timerDuration
         )
     }
 
     fun timerButtonPressed() {
-        val state = viewState.value!!
-        when (state.timerViewState) {
+        val currentState = getCurrentState()
+        when (currentState.timerViewState) {
             TimerViewState.IDLE -> {
-                startTimer(state.timerDuration)
+                startTimer(currentState.timerDuration)
             }
             TimerViewState.RUNNING -> {
                 stopTimer()
@@ -84,13 +93,13 @@ class TimerViewModel : ViewModel() {
     }
 
     fun addTime(duration: Duration) {
-        val currentState = viewState.value!!
+        val currentState = getCurrentState()
 
         _viewState.value = currentState.copy(timerDuration = currentState.timerDuration.plus(duration))
     }
 
     fun removeTime(duration: Duration) {
-        val currentState = viewState.value!!
+        val currentState = getCurrentState()
 
         val currentDuration = currentState.timerDuration
         if (currentDuration.minus(duration).isNegative) {
@@ -100,9 +109,10 @@ class TimerViewModel : ViewModel() {
     }
 
     private fun resetTimer() {
-        _viewState.value = viewState.value!!.copy(
+        val currentState = getCurrentState()
+        _viewState.value = currentState.copy(
             timerViewState = TimerViewState.IDLE,
-            durationRemaining = viewState.value!!.timerDuration
+            durationRemaining = currentState.timerDuration
         )
         viewModelScope.launch {
             viewEffectChannel.send(TimerViewEffect.TimerReset)

@@ -22,9 +22,6 @@ data class TimerModel(
     val durationRemaining: Duration = timerDuration,
     val timerViewState: TimerViewState = TimerViewState.IDLE
 ) {
-    fun isTimerRunning(): Boolean {
-        return timerViewState == TimerViewState.RUNNING
-    }
 
     fun getPercentageComplete(): Float {
         return (durationRemaining.toMillis().toFloat() / timerDuration.toMillis().toFloat())
