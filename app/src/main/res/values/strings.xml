@@ -13,4 +13,8 @@
     <string name="restart_timer">Reset Timer</string>
     <string name="stop_timer">Stop Timer</string>
     <string name="start_timer">Start Timer</string>
+    <string name="add_minute">Add minute</string>
+    <string name="add_second">Add Second</string>
+    <string name="remove_minute">Remove Minute</string>
+    <string name="remove_second">Remove second</string>
 </resources>

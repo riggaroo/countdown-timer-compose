@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,7 +31,9 @@ import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.timer.ext.formatDuration
 import java.time.Duration
 
@@ -43,7 +46,7 @@ fun TimerDurationWidget(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(horizontalArrangement = Arrangement.SpaceAround) {
             Icon(
-                Icons.Outlined.Add, contentDescription = "Add minute",
+                Icons.Outlined.Add, contentDescription = stringResource(id = R.string.add_minute),
                 modifier = Modifier
                     .size(56.dp)
                     .clickable {
@@ -51,9 +54,9 @@ fun TimerDurationWidget(
                     }
                     .padding(8.dp)
             )
-            Spacer(modifier = Modifier.width(56.dp))
+            Spacer(modifier = Modifier.width(96.dp))
             Icon(
-                Icons.Outlined.Add, contentDescription = "Add minute",
+                Icons.Outlined.Add, contentDescription = stringResource(id = R.string.add_second),
                 modifier = Modifier
                     .size(56.dp)
                     .clickable {
@@ -65,7 +68,7 @@ fun TimerDurationWidget(
         TimerText(timerText = timerDuration.formatDuration())
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
             Icon(
-                Icons.Outlined.Remove, contentDescription = "Remove minute",
+                Icons.Outlined.Remove, contentDescription = stringResource(id = R.string.remove_minute),
                 modifier = Modifier
                     .size(56.dp)
                     .clickable {
@@ -73,9 +76,9 @@ fun TimerDurationWidget(
                     }
                     .padding(8.dp)
             )
-            Spacer(modifier = Modifier.width(56.dp))
+            Spacer(modifier = Modifier.width(96.dp))
             Icon(
-                Icons.Outlined.Remove, contentDescription = "Remove minute",
+                Icons.Outlined.Remove, contentDescription =  stringResource(id = R.string.remove_second),
                 modifier = Modifier
                     .size(56.dp)
                     .clickable {

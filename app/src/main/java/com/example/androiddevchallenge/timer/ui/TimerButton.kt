@@ -50,6 +50,6 @@ fun TimerButton(timerViewState: TimerViewState, onButtonClick: () -> Unit) {
                 stringResource(id = R.string.restart_timer)
             }
         }
-        Text(text = text)
+        Text(text = text.toUpperCase())
     }
 }
