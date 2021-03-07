@@ -57,13 +57,14 @@ fun TimerScreen(timerViewModel: TimerViewModel, navController: NavController) {
     val context = LocalContext.current
 
     LaunchedEffect(key1 = navController) {
-        val mediaPlayer = MediaPlayer.create(context, R.raw.alarm_2)
+        var mediaPlayer : MediaPlayer? = null
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         timerViewModel.viewEffectChannel.receiveAsFlow().collect { viewEffect ->
             when (viewEffect) {
                 TimerViewEffect.TimerFinished -> {
                     startVibrating(vibrator = vibrator)
-                    playSound(mediaPlayer)
+                    mediaPlayer = MediaPlayer.create(context, R.raw.alarm_2)
+                    playSound(mediaPlayer!!)
                 }
                 TimerViewEffect.TimerReset -> {
                     stopVibrating(vibrator = vibrator)
@@ -189,8 +190,8 @@ fun playSound(mediaPlayer: MediaPlayer) {
     mediaPlayer.start()
 }
 
-fun stopPlayingSound(mediaPlayer: MediaPlayer) {
-    if (mediaPlayer.isPlaying) {
+fun stopPlayingSound(mediaPlayer: MediaPlayer?) {
+    if (mediaPlayer?.isPlaying == true) {
         mediaPlayer.stop()
     }
 }
